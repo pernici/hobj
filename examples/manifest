@@ -1,0 +1,9 @@
+
+d40nano.py  sequence of nanotubes
+
+rand_reg6.py example of computation of the matching generating polynomial
+    for a non-recursive sequence of regular graphs
+
+rnp_gen.py matching polynomials for a sequence of square grids
+
+ms_sqnp.py Merrifield-Simmons index I(1) for rectangular grids
