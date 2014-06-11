@@ -64,8 +64,13 @@ def rand_reg6_gen():
         #yield ii, nv
 
 if __name__ == '__main__':
-    N = 20
+    try:
+        N = int(sys.argv[1])
+    except:
+        print('prog N')
+        sys.exit()
+    print('rand_reg6:')
     for n1, d, nv in rand_reg6_gen():
         if n1 > N:
             break
-        print 'n1=%d d=%s\n%s' %(n1, d, nv)
+        print('n1=%d sum(nv)=%s' %(n1, sum(nv)))

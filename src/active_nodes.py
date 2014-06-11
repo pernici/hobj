@@ -1,20 +1,16 @@
 from collections import defaultdict, deque
 
-
-def _add_links1(links, d1, d2):
+def _add_links1(links0, d1, d2):
     """
     add links without increasing the number of active nodes
-
-    Parameters
-    ==========
-    links : list of edges defining the part of the graph covered
-    d1 : adjacency dict of the graph
-    d2 : adjacency dict of the part of the graph covered
+    d1 adjacency dict of the graph
+    d2 adjacency dict of the part of the graph covered
     """
+    links = []
     hit = True
     while hit:
         hit = False
-        for k, a in d2.items():
+        for k, a in list(d2.items()):
             # if there is only one edge missing to complete a node, add it
             if len(a) == len(d1[k]) - 1:
                 a1 = d1[k]
@@ -28,6 +24,8 @@ def _add_links1(links, d1, d2):
         # it two nodes adjacent in d1 are present in d2, and there
         # is no edge between them in d2, add it
         for k1, a in d1.items():
+            if not d2[k1]:
+                continue
             for k2 in a:
                 if k1 < k2 and k1 in d2 and \
                     ((k2 not in d2 and len(d2[k1]) == len(d1[k1]) - 1) or \
@@ -37,8 +35,8 @@ def _add_links1(links, d1, d2):
                     hit = True
                     links.append((k1, k2))
 
+    links0.extend(links)
     return links
-
 
 def m_from_d(d):
     n = len(d)
@@ -137,6 +135,14 @@ def ordered_links(d, k0, k1):
 
     d : dict for the graph
     k0, k1: adjacents nodes of the graphs
+
+    Examples
+    ========
+
+    >>> from active_nodes import ordered_links
+    >>> d = {0:[1,4], 1:[0,2], 2:[1,3], 3:[2,4], 4:[0,3]}
+    >>> ordered_links(d, 0, 1)
+    [(0, 1), (0, 4), (1, 2), (2, 3), (3, 4)]
     """
     assert k0 in d
     assert k1 in d[k0]
@@ -157,6 +163,14 @@ def ordered_links(d, k0, k1):
 def ordered_links_all(d):
     """
     find ordered links
+
+    Examples
+    ========
+
+    >>> from active_nodes import ordered_links_all
+    >>> d = {0:[1,4], 1:[0,2], 2:[1,3], 3:[2,4], 4:[0,3]}
+    >>> ordered_links_all(d)
+    (0, 1, [(0, 1), (0, 4), (1, 2), (2, 3), (3, 4)], 2)
     """
     max_active = 10000
     for k1x, v in d.items():
@@ -180,6 +194,16 @@ def num_active_nodes(d, links):
 
     d : dict for the graph
     links : list of edges of the graph
+
+    Examples
+    ========
+
+    >>> from active_nodes import ordered_links
+    >>> from active_nodes import ordered_links, num_active_nodes
+    >>> d = {0:[1,4], 1:[0,2], 2:[1,3], 3:[2,4], 4:[0,3]}
+    >>> links = ordered_links(d, 0, 1)
+    >>> num_active_nodes(d, links)
+    2
     """
     dx = defaultdict(list)
     max_active = 0

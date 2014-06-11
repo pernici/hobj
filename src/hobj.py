@@ -254,7 +254,7 @@ def hobj_list(p):
     >>> hobj_list(p)
     [[], [0], [1], [2], [3], [4], [0, 2], [0, 3], [1, 3], [1, 4], [2, 4]]
     """
-    items = p.items()
+    items = list(p.items())
     items.sort(key=lambda k: (count_bits_set(k[0]), _monom(k[0])))
     a = [_monom(expv) for expv, y in items]
     return a
@@ -589,7 +589,7 @@ class Hobj(object):
                             continue
                         exp = exp1 | exp2
                         if val != 1:
-                            v1 = v1*val
+                            v = v1*val
                     if exp & mask_free:
                         for i in free:
                             if exp & (1 << i):
@@ -682,6 +682,7 @@ def dup_gen_count_hobj(objects, K, val=None, pr=None):
     assert len(p) == 1
     return p[0]
 
+
 def dup_matching_generating_poly(d, val=None, pr=None, links=None, K=ZZ):
     """
     Return the matching polynomial for the graph defined by ``d``
@@ -718,12 +719,14 @@ def dup_matching_generating_poly(d, val=None, pr=None, links=None, K=ZZ):
     if list(sorted(d.keys())) != list(range(len(d))):
         bd = False
         d, dt = d_relabel(d)
+        if not links:
+            links = [[dt[k] for k in obj] for obj in links]
     if not links:
         k0 = 0
         links = [k0, d[k0][0]]
-    elif not bd:
-        links = [[dt[k] for k in obj] for obj in links]
-    ord_links = ordered_links(d, *links)
+        ord_links = ordered_links(d, *links)
+    else:
+        ord_links = links
     p = dup_gen_count_hobj(ord_links, K, val, pr)
     return p
 

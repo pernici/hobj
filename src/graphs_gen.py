@@ -7,14 +7,14 @@ def d_from_dir_adj_list(a):
         for j in v:
             d[i].append(j)
             d[j].append(i)
-    return d
+    return dict(d)
 
 def d_from_links(links):
     d = defaultdict(list)
     for k1, k2 in links:
         d[k1].append(k2)
         d[k2].append(k1)
-    return d
+    return dict(d)
 
 def d_from_m_bip(m):
     d = defaultdict(list)
@@ -24,7 +24,7 @@ def d_from_m_bip(m):
             if m[i][j]:
                 d[i].append(j+n1)
                 d[j+n1].append(i)
-    return d
+    return dict(d)
 
 def is_regular(d, r):
     """
@@ -152,13 +152,13 @@ def sq_d_np(n1, n2):
         d1[k] = v
     return d1
 
-def exagon_p(n1, n2):
+def hexagon_p(n1, n2):
     """
-    exagon lattice in brick wall representation, with periodic b.c.
+    hexagon lattice in brick wall representation, with periodic b.c.
     """
     assert n1 % 2 == 0
     assert n2 %2 == 0
-    m, d1, d2 = sq_mat(n1, n2)
+    m, d1, d2 = sq_mat(n1, n2, 'pp')
     for i in range(n1):
         for j in range(n2):
             if (i + j ) % 2 == 1:

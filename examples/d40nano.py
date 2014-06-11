@@ -1,7 +1,12 @@
+"""
+Compute the matching generating polynomials for a sequence of nanotubes
+obtained cutting a C_40 fullerene and inserting ``N`` strips of hexagons.
+"""
 import sys
 sys.path.insert(0,'../src')
 from time import time
 from hobj import Hobj
+from graphs_gen import d_from_links
 from domains import ZZ
 from copy import deepcopy
 
@@ -56,36 +61,25 @@ def nano_d40_seq():
             p2 = hb2.iadd_object(p2, 1, [i, j], free, K)
         assert len(p2) == 1
         nv = [y for y in p2[0]]
-        yield (ii + 1, nv)
+        yield (ii + 1, hb2.links, nv)
 
 
 
 def test_seq():
-    it = nano_d40_seq()
-    N = 100
-    i=0
-    for r in it:
-        #print 'i=', i
-        i += 1
+    try:
+        N = int(sys.argv[1])
+    except:
+        print('prog N')
+        sys.exit()
+
+    for i, links, nv in nano_d40_seq():
         if i > N:
             break
-        print 'r=', r
+        print('i=%d sum(nv)=%s' %(i, sum(nv)))
+        # put 1 here to print the dict of the graph
+        if 0:
+            print('  d=', d_from_links(links))
 
-def test_nano_d40_seq(N):
-    it = nano_d40_seq()
-    while 1:
-        t0 = time()
-        i, nv = it.next()
-        t1 = time()
-        if i > N:
-            break
-        fn = '../../dimer1/data_fuller/logd40_%d' % i
-        nv1 = eval(open(fn).read())
-        nv1.reverse()
-        #print 'DB41 nv=', nv
-        #print 'DB41 nv1=', nv1
-        assert nv == nv1
-        print '%d %.2f' %(i, t1 - t0)
-
-#test_seq()
-test_nano_d40_seq(100)
+if __name__ == '__main__':
+    print('d40nano test_seq:')
+    test_seq()

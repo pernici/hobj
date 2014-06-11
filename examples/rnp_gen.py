@@ -2,15 +2,15 @@ import sys
 sys.path.insert(0,'../src')
 from hobj import Hobj
 from densearith import dup_add
+from compatibility import itervalues
 
-def get_nv_r_np(p, K):
+def get_sum(p, K):
     """
     nv from p for rectangle non periodic
     """
     nv = []
-    for v in p.itervalues():
+    for v in itervalues(p):
         nv = dup_add(nv, v, K)
-    nv.reverse()
     return nv
 
 def nv_r_nx_ny_np_rec(ny, K):
@@ -47,7 +47,7 @@ def nv_r_nx_ny_np_rec(ny, K):
         #print 'DB3 d=', d
         # closure
         #print 'DB2 len(p)=', len(p)
-        nv = get_nv_r_np(p, K)
+        nv = get_sum(p, K)
         #t2=time()
         #print '%.3f %.3f' %(t1-t0, t2-t1)
         #print '(%d, %d): %s' %(n//ny, ny, nv)
@@ -62,19 +62,17 @@ def test1():
     try:
         ny = int(sys.argv[1])
     except:
-        print 'prog ny'
+        print('prog ny')
         sys.exit()
 
     it = nv_r_nx_ny_np_rec(ny, K)
-    for i in range(ny + 1):
-        t0 = time()
-        n1, n2, nv = it.next()
-        t1 = time()
-        sys.stderr.write('n1=%d n2=%d %.2f\n' %(n1, n2, t1 - t0))
-        print 'n1=%d n2=%d nv=%s' %(n1, n2, nv)
+    for n1, n2, nv in it:
+        #sys.stderr.write('n1=%d n2=%d %.2f\n' %(n1, n2, t1 - t0))
+        print('n1=%d n2=%d nv=%s' %(n1, n2, nv))
         if n1 >= ny:
             break
 
 
 if __name__ == '__main__':
+    print('rnp_gen:')
     test1()
