@@ -51,7 +51,7 @@ def nano_d40_seq():
 
         n += 20
         # closure, South cap
-        p2 =  p
+        p2 =  p.copy()
         hb2 = deepcopy(hb)
         # strip
         for i, j, free in c:

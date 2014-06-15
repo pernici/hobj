@@ -260,7 +260,10 @@ def hobj_list(p):
     return a
 
 
-def _hobj_mul_val(p1, p2, free_vars_indices, K):
+def _gen_hobj_mul(p1, p2, free_vars_indices, K):
+    """
+    helper for gen_hobj
+    """
     p = {}
     mask_free = 0
     for i in free_vars_indices:
@@ -337,8 +340,7 @@ def gen_hobj(objects, vlist=None):
             if not hit:
                 done_vars.add(j)
                 free_vars.add(j)
-        #p = _prm_mul2(p, p1, free_vars, K)
-        p = _hobj_mul_val(p, p1, free_vars, ZZ)
+        p = _gen_hobj_mul(p, p1, free_vars, ZZ)
 
     return p
 
