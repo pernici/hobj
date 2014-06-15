@@ -211,3 +211,11 @@ def dup_sqr(f, K):
 
     return dup_strip(h)
 
+def dup_valuate(p, val):
+    """
+    evaluate the polynomial ``p`` in the point ``val``
+    """
+    r = 0
+    for c in p:
+        r = r*val + c
+    return r

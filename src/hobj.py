@@ -111,7 +111,59 @@ def _prm_mul(p1, p2, free_vars_indices, K):
             p[exp] = dup_add(get(exp, []), v, K)
     return p
 
-def dup_permanental_minor_poly(m, K):
+def _prm_mul_val(p1, p2, free_vars_indices, val):
+    p = {}
+    mask_free = 0
+    for i in free_vars_indices:
+        mask_free += 1 << i
+    if not p2:
+        return p
+    get = p.get
+    for exp1, v1 in iteritems(p1):
+        for exp2, v2 in p2.items():
+            if exp1 & exp2:
+                continue
+            exp = exp1 | exp2
+            v =  v1*v2
+            if exp & mask_free:
+                for i in free_vars_indices:
+                    if exp & (1 << i):
+                        exp = exp ^ (1 << i)
+                        v = v*val
+            p[exp] = get(exp, 0) + v
+    return p
+
+def _get_poly_from_list(a, K):
+    """
+    polynomial ``1 + sum eta_i a[i]``
+    """
+    p = {0: K.one}
+    for i in range(len(a)):
+        if a[i]:
+            p[1<<i] = a[i]
+    return p
+
+def _dup_permanental_minor_poly_val(m, K, val):
+    n = len(m)
+    ny = len(m[0])
+    p = _get_poly_from_list(m[0], K)
+    done_vars = set()
+    for i in range(1, n):
+        p1 = _get_poly_from_list(m[i], K)
+        free_vars_indices = []
+        for j in range(ny):
+            if j in done_vars:
+                continue
+            r = _is_free_var(i+1, j, m)
+            if r:
+                free_vars_indices.append(j)
+                done_vars.add(j)
+        p = _prm_mul_val(p, p1, free_vars_indices, val)
+
+    assert len(p) == 1
+    return p[0]
+
+def dup_permanental_minor_poly(m, K, val=None):
     """
     return the polynomial of the sum of permanental minors of a matrix ``m``
 
@@ -126,6 +178,7 @@ def dup_permanental_minor_poly(m, K):
     ==========
 
     m : matrix in list form
+    val : value at which the polynomial is evaluated
 
     Examples
     ========
@@ -135,8 +188,11 @@ def dup_permanental_minor_poly(m, K):
     >>> m = [[2,1,2],[3,0,1],[1,1,2]]
     >>> dup_permanental_minor_poly(m, ZZ)
     [15, 36, 13, 1]
+    >>> dup_permanental_minor_poly(m, ZZ, 1)
+    65
     """
-
+    if val is not None:
+        return _dup_permanental_minor_poly_val(m, K, val)
     n = len(m)
     ny = len(m[0])
     p = {0:[K.one]}

@@ -5,7 +5,9 @@ from active_nodes import (ordered_links, ip_list_objects_from_vlist,
 from hobj import (dup_permanental_minor_poly, gen_hobj,
     dup_matching_generating_poly, dup_independence_poly, hobj_str)
 
+from densearith import dup_valuate
 from domains import ZZ
+
 from graphs_gen import sq_mat, dict_fuller, line_graph
 
 SLOW_TEST = 0
@@ -28,6 +30,10 @@ def test_dup_permanental_minor_poly():
     r1 = [18029573537492, 51585910340388, 29716353005684, 6172212694596, \
           590164352416, 29473932148, 821101973, 13071249, 116883, 541, 1]
     assert r == r1
+    c1 = dup_permanental_minor_poly(m, ZZ, val=1)
+    assert sum(r) == c1
+    c2 = dup_permanental_minor_poly(m, ZZ, val=-3)
+    assert dup_valuate(r, -3) == c2
 
 def test_matching_poly_bipartite():
     m, d1, d2 = sq_mat(6, 6, 'pp')
