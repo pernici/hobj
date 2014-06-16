@@ -35,6 +35,10 @@ def test_dup_permanental_minor_poly():
     c2 = dup_permanental_minor_poly(m, ZZ, val=-3)
     assert dup_valuate(r, -3) == c2
 
+    m = [[i+2*j for j in range(7)] for i in range(5)]
+    r = dup_permanental_minor_poly(m, ZZ)
+    assert r == [44862720, 12227040, 915600, 25550, 280, 1]
+
 def test_matching_poly_bipartite():
     m, d1, d2 = sq_mat(6, 6, 'pp')
     p = dup_permanental_minor_poly(m, ZZ)
