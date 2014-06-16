@@ -502,7 +502,7 @@ class Hobj(object):
         Notes
         =====
 
-        ``p`` is in general changed.
+        ``p`` is changed only if ``free`` is empty
 
         ``free`` is the list of indices of ``eta`` elements which
         are integrated (that is, put to ``1`` after performing the product).

@@ -52,7 +52,9 @@ def rand_reg6_gen():
         if n1 == 2 or n1 % 2 == 1:
             continue
         # closure
-        p2 = p.copy()
+        # it is not necessary to copy `p` since `free` is not empty in the
+        # first call of iadd_object
+        p2 = p
         hb2 = deepcopy(hb)
         for i in range(6):
             p2 = hb2.iadd_object(p2, 1, [i, n - 6 + i], [i, n - 6 + i], K)
