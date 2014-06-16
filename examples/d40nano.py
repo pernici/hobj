@@ -51,7 +51,9 @@ def nano_d40_seq():
 
         n += 20
         # closure, South cap
-        p2 =  p.copy()
+        # it is not vecessary to copy `p` since free = c[0][2] = [-19]
+        # see docstring of iadd_object
+        p2 =  p
         hb2 = deepcopy(hb)
         # strip
         for i, j, free in c:
