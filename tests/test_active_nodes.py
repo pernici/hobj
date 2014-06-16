@@ -32,7 +32,8 @@ def test_ip_num_active_elements2():
     assert nu == 8
 
 
-
-test_ordered_links()
-test_ip_num_active_elements1()
-test_ip_num_active_elements2()
+if __name__ == '__main__':
+    test_ordered_links()
+    test_ip_num_active_elements1()
+    test_ip_num_active_elements2()
+    print('test_active_nodes ok')

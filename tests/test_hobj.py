@@ -93,10 +93,16 @@ def test_dup_independence_poly():
             1143638, 763144, 368868, 127960, 31320, 5248, 570, 36, 1]
     assert p == a
     r = dup_independence_poly(d, vlist=vlist, val=1)
-    assert r == sum(a)
+    # see https://oeis.org/search?q=A006506
+    assert r == sum(a) == 5598861
     pr = 73
     r1 = dup_independence_poly(d, vlist=vlist, val=1, pr=pr)
     assert r1 == r % pr
+    n1, n2 = 10, 10
+    d = sq_d_np(n1, n2)
+    vlist = list(range(n1*n2))
+    r = dup_independence_poly(d, vlist=vlist, val=1)
+    assert r == 2030049051145980050
 
     
 def test_line_graph():
@@ -187,3 +193,4 @@ if __name__ == '__main__':
 
     if SLOW_TEST:
         test_gen_hobj_C34()
+    print('test_hobj ok')
