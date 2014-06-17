@@ -756,6 +756,9 @@ def dup_matching_generating_poly(d, val=None, pr=None, links=None, K=ZZ):
     Notes
     =====
 
+    The dictionary ``d`` associates to each vertex of the graph the list
+    of its neighbours.
+
     A simple greedy algorithm tries to find an efficient ordering of
     vertices to compute the independence polynomial.
     To help it, it can be provided an initial path ``links``;
@@ -804,6 +807,9 @@ def dup_independence_poly(d, val=None, pr=None, links=None, vlist=None, K=ZZ):
 
     Notes
     =====
+
+    The dictionary ``d`` associates to each vertex of the graph the list
+    of its neighbours.
 
     A simple greedy algorithm tries to find an efficient ordering of
     vertices to compute the independence polynomial.
@@ -858,7 +864,13 @@ def independent_sets_gen(d):
 
 def independence_sets(d):
     """
-    Return the list of independence sets of the graph with dict ``d``.
+    list of independence sets of vertices of the graph with dict ``d``.
+
+    Notes
+    =====
+
+    The dictionary ``d`` associates to each vertex of the graph the list
+    of its neighbours.
 
     Examples
     ========

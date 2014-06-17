@@ -1,3 +1,18 @@
+"""
+Matching polynomials for a sequence of random regular bipartite graphs.
+
+Sequence of regular bipartite graphs constructed in the following way.
+Let $G_0$ be a cycle with $k$ vertices, with $k$ even.
+Add another cycle with $k$ vertices;
+the odd (even) vertices of this cycle are linked respectively
+to the even (odd) vertices of the
+previous cycle in a random way, obtaining $G_1$;
+continue adding cycles in this way, obtaining the sequence ${G_i}$.
+The sequence of the corresponding regular bipartite graphs
+is obtained linking the vertices of the first and last cycle.
+
+
+"""
 import sys
 sys.path.insert(0,'../src')
 from copy import deepcopy
@@ -63,7 +78,6 @@ def rand_reg6_gen():
         assert len(hb2.links) == len(set(hb2.links))
         d = d_from_links(hb2.links)
         yield n1, dict(d), nv
-        #yield ii, nv
 
 if __name__ == '__main__':
     try:
