@@ -776,11 +776,9 @@ def dup_matching_generating_poly(d, val=None, pr=None, links=None, K=ZZ):
 
     """
     from active_nodes import ordered_links
-    bd = True
     if list(sorted(d.keys())) != list(range(len(d))):
-        bd = False
         d, dt = d_relabel(d)
-        if not links:
+        if links:
             links = [[dt[k] for k in obj] for obj in links]
     if not links:
         k0 = 0
@@ -838,15 +836,12 @@ def dup_independence_poly(d, val=None, pr=None, links=None, vlist=None, K=ZZ):
     """
     bd = True
     if list(sorted(d.keys())) != list(range(len(d))):
-        bd = False
         d, dt = d_relabel(d)
     if not vlist:
         if not links:
             k0 = 0
             links = [k0, d[k0][0]]
         vlist = ip_ordered_vertices(d, *links)
-    elif not bd:
-        vlist = [dt[k] for k in vlist]
     objects = ip_list_objects_from_vlist(d, vlist)
     p = dup_gen_count_hobj(objects, K, val, pr)
     return p
