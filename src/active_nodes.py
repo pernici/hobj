@@ -287,7 +287,7 @@ def ip_add_object(v, d, dn, ac, vlist):
 
 def ip_list_objects_from_vlist(d, vlist, dn=None):
     """
-    return list of objects diven ``d`` and a list of vertices
+    return list of objects given ``d`` and a list of vertices
 
     Parameters
     ==========

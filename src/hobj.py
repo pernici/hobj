@@ -786,6 +786,9 @@ def dup_matching_generating_poly(d, val=None, pr=None, links=None, K=ZZ):
         ord_links = ordered_links(d, *links)
     else:
         ord_links = links
+    num_edges = sum([len(v) for v in d.values()]) // 2
+    if num_edges != len(ord_links):
+        raise ValueError('wrong number of links')
     p = dup_gen_count_hobj(ord_links, K, val, pr)
     return p
 
@@ -842,6 +845,8 @@ def dup_independence_poly(d, val=None, pr=None, links=None, vlist=None, K=ZZ):
             k0 = 0
             links = [k0, d[k0][0]]
         vlist = ip_ordered_vertices(d, *links)
+    if len(d) != len(vlist):
+        raise ValueError('vlist has not all the vertices of the graph')
     objects = ip_list_objects_from_vlist(d, vlist)
     p = dup_gen_count_hobj(objects, K, val, pr)
     return p
