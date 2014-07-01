@@ -509,7 +509,7 @@ class Hobj(object):
 
         Examples
         ========
-        
+
         >>> from domains import ZZ
         >>> from hobj import Hobj, obj_free
         >>> p = {0: [ZZ.one]}
@@ -751,7 +751,7 @@ def dup_matching_generating_poly(d, val=None, pr=None, links=None, K=ZZ):
     d : dict for the graph
     val : evaluate the polynomial in ``val``
     pr : evaluate the polynomial modulo the prime ``pr``
-    links : list of vertices of the graph forming a path
+    links : list of edges of the graph
 
     Notes
     =====
@@ -761,10 +761,12 @@ def dup_matching_generating_poly(d, val=None, pr=None, links=None, K=ZZ):
 
     A simple greedy algorithm tries to find an efficient ordering of
     vertices to compute the independence polynomial.
-    To help it, it can be provided an initial path ``links``;
-    for instance in a long rectangle ``(m, n)``, with ``m`` much greater
-    than ``n``, the path can be a short side ``n``;
-    in this case the greedy algorithm tries to deduce an efficient ordering.
+
+    For graphs which are not biconnected, in general this greedy
+    algorithm does not work.
+    For biconnected graphs, there is no guarantee that an efficient
+    ordering of the links is found.
+    In either case, one can provide explicitly the parameter `links`.
 
     Examples
     ========
@@ -773,6 +775,10 @@ def dup_matching_generating_poly(d, val=None, pr=None, links=None, K=ZZ):
     >>> d = {0:[1,4], 1:[0,2], 2:[1,3], 3:[2,4], 4:[0,3]}
     >>> dup_matching_generating_poly(d)
     [5, 5, 1]
+    >>> d = {0:[4], 1:[2,4], 2:[1,3], 3:[2,4], 4:[0,1,3]}
+    >>> links = [(0,4),(1,4),(3,4),(1,2),(2,3)]
+    >>> dup_matching_generating_poly(d, links=links)
+    [4, 5, 1]
 
     """
     from active_nodes import ordered_links
@@ -814,15 +820,22 @@ def dup_independence_poly(d, val=None, pr=None, links=None, vlist=None, K=ZZ):
 
     A simple greedy algorithm tries to find an efficient ordering of
     vertices to compute the independence polynomial.
-    To help it, it can be provided an initial path ``links``;
+
+
+    For graphs which are not biconnected, in general this greedy
+    algorithm does not work.
+    For biconnected graphs, there is no guarantee that an efficient
+    ordering of the vertices is found.
+    In either case, one can provide explicitly the parameter `vlist`.
+
+    Alternatively, for biconnected graphs, one can
+    provide an initial path ``links``;
     for instance in a long rectangle ``(m, n)``, with ``m`` much greater
     than ``n``, the path can be a short side ``n``;
     in this case the greedy algorithm deduces an efficient ordering
     of vertices, that is it adds short vertical lines of vertices
     till all the rectangle is obtained; the number of active nodes is
     ``nu=n``.
-    Alternatively, one can provide an ordering of all vertices in the
-    graph in ``vlist``.
     Giving no hint, the algorithm might start with an horizontal line
     of vertices, and continue adding horizontal lines; then the number
     of active nodes would be ``nu=m``. The complexity of the
