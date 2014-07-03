@@ -495,7 +495,7 @@ class Hobj(object):
         a = [[dtinv[i] for i in _monom(expv)] for expv, y in items]
         return a
 
-    def iadd_object(hb, p, val, obj, free, K, valued=None, pr=None):
+    def iadd_object(hb, p, val, obj, free, K):
         """
         multiply ``p`` by ``(1 + t*val*eta_i*eta_j)``
 
@@ -558,23 +558,14 @@ class Hobj(object):
                         if exp1 & exp2:
                             continue
                         exp = exp1 | exp2
-                        if valued:
-                            if val != 1:
-                                v1 = v1*val
-                        else:
-                            if val != 1:
-                                v1 = dup_mul_ground(v1, val, K)
-                            v = dup_lshift(v1, 1, K)
+                        if val != 1:
+                            v1 = dup_mul_ground(v1, val, K)
+                        v = dup_lshift(v1, 1, K)
                     if exp & mask_free:
                         for i in free:
                             if exp & (1 << i):
                                 exp = exp ^ (1 << i)
-                    if valued:
-                        c = get(exp, 0) + v
-                        if pr:
-                            c = c % pr
-                    else:
-                        p[exp] = dup_add(get(exp, []), v, K)
+                    p[exp] = dup_add(get(exp, []), v, K)
             for exp in free:
                 freedt.append(exp)
             return p
@@ -726,7 +717,7 @@ def dup_gen_count_hobj(objects, K, val=None, pr=None):
     """
     a = obj_free(objects)
     hb = Hobj(pr=pr)
-    if not val:
+    if val is None:
         if pr:
             raise NotImplementedError
         p = {0: [K.one]}

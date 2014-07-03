@@ -58,7 +58,8 @@ def sq_mat(n1, n2, typ):
     n1 : number of vertices on side ``(x, 0)``
     n2 : number of vertices on side ``(0, y)``
     typ : type of boundary condition: ``pp`` periodic in both
-    directions; ``np`` open boundary conditions
+    directions; ``np`` open boundary conditions,
+    ``px`` periodic in x-direction
     """
     d1 = {}
     d2 = {}
@@ -87,6 +88,31 @@ def sq_mat(n1, n2, typ):
                     m[r1][d2[((i + 1) % n1, j)]] = 1
                     m[r1][d2[((i - 1) % n1, j)]] = 1
         return m, d1, d2
+    elif typ == 'px':
+        for i in range(n1):
+            for j in range(n2):
+                if (i + j )%2 == 0:
+                    v1.append((i, j))
+                    d1[(i,j)] = c1
+                    c1 += 1
+                else:
+                    v2.append((i, j))
+                    d2[(i,j)] = c2
+                    c2 += 1
+        # d1 dict (vertex, index labeling vertex)
+        m = [[0]*len(d2) for i in range(len(d1))]
+        for i in range(n1):
+            for j in range(n2):
+                if (i + j)%2 == 0:
+                    r1 = d1[(i, j)]
+                    if j < n2 - 1:
+                        m[r1][d2[(i, (j + 1))]] = 1
+                    if j >= 1:
+                        m[r1][d2[(i, j - 1)]] = 1
+                    m[r1][d2[((i + 1)%n1, j)]] = 1
+                    m[r1][d2[((i - 1)%n1, j)]] = 1
+        return m, d1, d2
+
     elif typ == 'np':
         for i in range(n1):
             for j in range(n2):
